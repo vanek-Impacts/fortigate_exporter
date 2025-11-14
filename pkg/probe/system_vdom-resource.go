@@ -16,12 +16,12 @@ package probe
 import (
 	"log"
 
-	"github.com/prometheus-community/fortigate_exporter/pkg/http"
 	"github.com/prometheus/client_golang/prometheus"
+
+	"github.com/prometheus-community/fortigate_exporter/pkg/http"
 )
 
-func probeSystemVdomResource(c http.FortiHTTP, meta *TargetMetadata) ([]prometheus.Metric, bool) {
-	
+func probeSystemVdomResource(c http.FortiHTTP, _ *TargetMetadata) ([]prometheus.Metric, bool) {
 	vdomDesc := make(map[string]*prometheus.Desc)
 	vdomDesc["cpu"] = prometheus.NewDesc(
 		"fortigate_vdom_resource_cpu_usage_ratio",
@@ -46,12 +46,12 @@ func probeSystemVdomResource(c http.FortiHTTP, meta *TargetMetadata) ([]promethe
 	vdomDesc["id"] = prometheus.NewDesc(
 		"fortigate_vdom_resource_object_id",
 		"Object Resource ID",
-		[]string{"vdom", "object"},nil,
+		[]string{"vdom", "object"}, nil,
 	)
 	vdomDesc["custom_max"] = prometheus.NewDesc(
 		"fortigate_vdom_resource_object_custom_max",
 		"Object Custom Max",
-		[]string{"vdom", "object"},nil,
+		[]string{"vdom", "object"}, nil,
 	)
 	vdomDesc["min_custom_value"] = prometheus.NewDesc(
 		"fortigate_vdom_resource_object_custom_min_value",
@@ -61,42 +61,42 @@ func probeSystemVdomResource(c http.FortiHTTP, meta *TargetMetadata) ([]promethe
 	vdomDesc["max_custom_value"] = prometheus.NewDesc(
 		"fortigate_vdom_resource_object_custom_max_value",
 		"Object Maximum custom value",
-		[]string{"vdom", "object"},nil,
+		[]string{"vdom", "object"}, nil,
 	)
 	vdomDesc["guaranteed"] = prometheus.NewDesc(
 		"fortigate_vdom_resource_object_guaranteed",
 		"Object Guaranteed",
-		[]string{"vdom", "object"},nil,
+		[]string{"vdom", "object"}, nil,
 	)
 	vdomDesc["min_guaranteed_value"] = prometheus.NewDesc(
 		"fortigate_vdom_resource_object_guaranteed_max_value",
 		"Object Minimum guaranteed value",
-		[]string{"vdom", "object"},nil,
+		[]string{"vdom", "object"}, nil,
 	)
 	vdomDesc["max_guaranteed_value"] = prometheus.NewDesc(
 		"fortigate_vdom_resource_object_guaranteed_min_value",
 		"Object Maximum guaranteed value",
-		[]string{"vdom", "object"},nil,
+		[]string{"vdom", "object"}, nil,
 	)
 	vdomDesc["global_max"] = prometheus.NewDesc(
 		"fortigate_vdom_resource_object_global_max",
 		"Object Global max",
-		[]string{"vdom", "object"},nil,
+		[]string{"vdom", "object"}, nil,
 	)
 	vdomDesc["current_usage"] = prometheus.NewDesc(
 		"fortigate_vdom_resource_object_current_usage",
 		"Object Current usage",
-		[]string{"vdom", "object"},nil,
+		[]string{"vdom", "object"}, nil,
 	)
 	vdomDesc["usage_percent"] = prometheus.NewDesc(
 		"fortigate_vdom_resource_object_usage_ratio",
 		"Object Usage percentage",
-		[]string{"vdom", "object"},nil,
+		[]string{"vdom", "object"}, nil,
 	)
 
 	type VDOMResourceResult struct {
-		Result interface{}             `json:"results"`
-		Vdom   string                  `json:"vdom"`
+		Result any    `json:"results"`
+		Vdom   string `json:"vdom"`
 	}
 
 	var res []VDOMResourceResult
@@ -107,7 +107,7 @@ func probeSystemVdomResource(c http.FortiHTTP, meta *TargetMetadata) ([]promethe
 
 	m := []prometheus.Metric{}
 	for _, result := range res {
-		for k, elem := range result.Result.(map[string]interface{}) {
+		for k, elem := range result.Result.(map[string]any) {
 			switch k {
 			case "cpu", "memory", "setup_rate":
 				m = append(m, prometheus.MustNewConstMetric(vdomDesc[k], prometheus.GaugeValue, elem.(float64), result.Vdom))
@@ -118,24 +118,24 @@ func probeSystemVdomResource(c http.FortiHTTP, meta *TargetMetadata) ([]promethe
 					m = append(m, prometheus.MustNewConstMetric(vdomDesc[k], prometheus.GaugeValue, 0, result.Vdom))
 				}
 			case "session",
-			"ipsec-phase1",
-			"ipsec-phase2",
-			"ipsec-phase1-interface",
-			"ipsec-phase2-interface",
-			"dialup-tunnel",
-			"firewall-policy",
-			"firewall-address",
-			"firewall-addrgrp",
-			"custom-service",
-			"service-group",
-			"onetime-schedule",
-			"recurring-schedule",
-			"user",
-			"user-group",
-			"sslvpn",
-			"proxy",
-			"log-disk-quota":
-				for val, e := range elem.(map[string]interface{}) {
+				"ipsec-phase1",
+				"ipsec-phase2",
+				"ipsec-phase1-interface",
+				"ipsec-phase2-interface",
+				"dialup-tunnel",
+				"firewall-policy",
+				"firewall-address",
+				"firewall-addrgrp",
+				"custom-service",
+				"service-group",
+				"onetime-schedule",
+				"recurring-schedule",
+				"user",
+				"user-group",
+				"sslvpn",
+				"proxy",
+				"log-disk-quota":
+				for val, e := range elem.(map[string]any) {
 					m = append(m, prometheus.MustNewConstMetric(vdomDesc[val], prometheus.GaugeValue, e.(float64), result.Vdom, k))
 				}
 			default:
