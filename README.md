@@ -123,6 +123,10 @@ Per-VDOM:
  * _System/SDNConnector_
    * `fortigate_system_sdn_connector_status`
    * `fortigate_system_sdn_connector_last_update_seconds`
+ * _/System/CentralManagement/Status_
+   * `fortigate_system_central_management_mode`
+   * `fortigate_system_central_management_status`
+   * `fortigate_system_central_management_registration_status`
  * _System/VDOMResource_
    * `fortigate_vdom_resource_cpu_usage`
    * `fortigate_vdom_resource_memory_usage`
@@ -459,6 +463,7 @@ To improve security, limit permissions to required ones only (least privilege pr
 |Log/DiskUsage                | loggrp.config      |api/v2/monitor/log/current-disk-usage |
 |Network/Dns/Latency          | sysgrp.cfg         |api/v2/monitor/network/dns/latency |
 |System/AvailableCertificates | *any*              |api/v2/monitor/system/available-certificates |
+|System/Central-management/Status | sysgrp.cfg         |api/v2/monitor/system/central-management/status|
 |System/Fortimanager/Status   | sysgrp.cfg         |api/v2/monitor/system/fortimanager/status |
 |System/HAStatistics          | sysgrp.cfg         |api/v2/monitor/system/ha-statistics<br>api/v2/cmdb/system/ha |
 |System/Interface             | netgrp.cfg         |api/v2/monitor/system/interface/select |
