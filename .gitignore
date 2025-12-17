@@ -6,6 +6,11 @@
 # Artifacts
 fortigate_exporter
 *.exe
+fortigate-exporter.*
+target/
+/fortigate-key.yaml
+/pkg/probe/testdata/interface-traffic-history.jsonnet
+/pkg/probe/testdata/system-traffic-history-interface-wan1.jsonnet
 
 # coverage
 cover.out
